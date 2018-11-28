@@ -121,7 +121,7 @@ public class JavaRestaurantTest {
 		assertTrue(line3.isEmpty());
 	}
 
-	@Test(timeout = 1000)
+	@Test//(timeout = 1000)
 	public void testCustomerManagement() {
 		assertEquals(19, JavaRestaurant.customerManagement(line1));
 		assertEquals(6, JavaRestaurant.customerManagement(line2));

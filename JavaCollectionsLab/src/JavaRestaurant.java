@@ -3,8 +3,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 
-
-
 public class JavaRestaurant {
 
 	/**
@@ -127,10 +125,8 @@ public class JavaRestaurant {
 	 */
 	public static int customerManagement(Queue<Customer> incomingCustomers) {
 		int totalMoney = 0; //money earned
-
-		// YOUR CODE
 		
-		return totalMoney;
+		return incomingCustomers.size();
 
 	}
 	
@@ -143,11 +139,43 @@ public class JavaRestaurant {
 		 */
 		@Override
 		public int compare(Customer arg0, Customer arg1) {
-			// YOUR CODE
-			
-			return 0; // Dummy return
+			return 0;
 		}
 		
+	}
+	
+	/**
+	 * Recursive Selection Sort for an array
+	 * @param shelve - Array to be sorted
+	 */
+	public static Queue<Customer> selectionSort(Queue<Customer> line, Comparator<Customer> comp) {
+		Customer[] lineArr = new Customer[line.size()];
+		int idx = 0;
+		for(Customer cu: line) {
+			lineArr[idx] = cu;
+			idx++;
+		}
+		selHelper(lineArr, 0, comp);
+		Queue<Customer> newLine = new LinkedList<>();
+		for(idx = 0; idx < lineArr.length; idx++) {
+			newLine.add(lineArr[idx]);
+		}
+		return newLine;
+		
+	}
+	
+	private	static void	selHelper(Customer[] lineArr, int tailIndex, Comparator<Customer> comp) {
+		if(tailIndex >= lineArr.length) { return; }
+		int	minIndex = tailIndex;
+		for(int	i = tailIndex; i < lineArr.length; i++) {
+			if(comp.compare(lineArr[minIndex], lineArr[i]) > 0) {
+				minIndex = i;
+			}	
+		}
+		Customer temp = lineArr[minIndex];
+		lineArr[minIndex] = lineArr[tailIndex];
+		lineArr[tailIndex] = temp;
+		selHelper(lineArr, tailIndex+1, comp);
 	}
 
 	public static class Customer {
