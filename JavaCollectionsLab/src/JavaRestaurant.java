@@ -1,5 +1,7 @@
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Queue;
+
 
 public class JavaRestaurant {
 
@@ -12,11 +14,11 @@ public class JavaRestaurant {
 	 * @return - returns the total amount of money that the customers 
 	 * paid for the service. 
 	 */
-	public static int FastFood(Queue<Customer> incomingCustomers) {
+	public static int fastFood(Queue<Customer> incomingCustomers) {
 		int t = 0; //time
-		int TotalMoney = 0; //money earned
-		Customer CustomerAtCashRegister = null; //where the customer will be attended
-		Queue<Customer> WaitingLine = new LinkedList<>(); //waiting Line
+		int totalMoney = 0; //money earned
+		Customer customerAtCashRegister = null; //where the customer will be attended
+		Queue<Customer> waitingLine = new LinkedList<>(); //waiting Line
 
 		//Looks for first customer
 		while (t != incomingCustomers.peek().getTimeEntered()) {
@@ -24,10 +26,10 @@ public class JavaRestaurant {
 		}
 
 		//Assign first customer to cash register
-		CustomerAtCashRegister = (incomingCustomers.poll());
+		customerAtCashRegister = (incomingCustomers.poll());
 
 		//If initial list, the waiting line and the cash register aren't empty.
-		while (!incomingCustomers.isEmpty() || !WaitingLine.isEmpty() || CustomerAtCashRegister!= null) {
+		while (!incomingCustomers.isEmpty() || !waitingLine.isEmpty() || customerAtCashRegister!= null) {
 			
 			/** If cash register is available and someone is waiting in line, 
 			 * then move the next customer from waiting line to cash register.
@@ -36,16 +38,16 @@ public class JavaRestaurant {
 			 * If that is the case, move that customer to the waiting line.
 			 *	
 			 * Takes 1 unit of time from customer in cash register for their respective order.
-			 *
+			 *	
 			 * If the cash register is done, accumulate the money from the order
 			 * and free the cash register.
 			 */
 			
 			// YOUR CODE
-
+			
 			t++;
 		}
-		return TotalMoney;
+		return totalMoney;
 	}
 
 	/**
@@ -59,11 +61,11 @@ public class JavaRestaurant {
 	 * paid for the service. 
 	 */
 	
-	public static int FastFoodWithPatience(Queue<Customer> incomingCustomers) {
+	public static int fastFoodWithPatience(Queue<Customer> incomingCustomers) {
 		int t = 0; //time
-		int TotalMoney = 0; //money earned
-		Customer CustomerAtCashRegister = null; //where the customer will be attended
-		Queue<Customer> WaitingLine = new LinkedList<>(); //waiting Line
+		int totalMoney = 0; //money earned
+		Customer customerAtCashRegister = null; //where the customer will be attended
+		Queue<Customer> waitingLine = new LinkedList<>(); //waiting Line
 
 		//Looks for first customer
 		while (t != incomingCustomers.peek().getTimeEntered()) {
@@ -71,10 +73,10 @@ public class JavaRestaurant {
 		}
 
 		//Assign first customer to cash register
-		CustomerAtCashRegister = (incomingCustomers.poll());
+		customerAtCashRegister = (incomingCustomers.poll());
 
 		//If initial list, the waiting line and the cash register aren't empty.
-		while (!incomingCustomers.isEmpty() || !WaitingLine.isEmpty() || CustomerAtCashRegister!= null) {
+		while (!incomingCustomers.isEmpty() || !waitingLine.isEmpty() || customerAtCashRegister!= null) {
 			
 			/** If cash register is available and someone is waiting in line, 
 			 * then move the next customer from waiting line to cash register.
@@ -91,11 +93,10 @@ public class JavaRestaurant {
 			 */
 			
 			// YOUR CODE
-
+			
 			t++;
 		}
-		return TotalMoney;
-
+		return totalMoney;
 	}
 
 	/**
@@ -106,10 +107,10 @@ public class JavaRestaurant {
 	 * @param waitingLine
 	 * @return the waitingLine with the patience depleted and those with equal to 0 removed.
 	 */
-	private static Queue<Customer> pacienceReducer(Queue<Customer> waitingLine) {
+	private static Queue<Customer> patienceReducer(Queue<Customer> waitingLine) {
 		// YOUR CODE
-		// RESTRICTION: DO NOT CREATE ANY NEW DATA STRUCTURES.
-	
+		// RESTRICTION: DO NOT CREATE A NEW DATA STRUCTURE
+
 		return waitingLine;
 	}
 
@@ -122,24 +123,72 @@ public class JavaRestaurant {
 	 * @param incomingCustomers
 	 * @return the total money earned.
 	 */
-	public static int CustomerManagement(Queue<Customer> incomingCustomers) {
-		int TotalMoney = 0; //money earned
-
-		return TotalMoney;
+	public static int customerManagement(Queue<Customer> incomingCustomers) {
+		int totalMoney = 0; //money earned
+		
+		return incomingCustomers.size();
 
 	}
+	
+	public static class CustomerComparator implements Comparator<Customer> {
 
-	public static class Customer implements Comparable<Customer> {
+		/**
+		 * Exercise 3
+		 * Implement the comparable so that we can sort the 
+		 * entering customers by Patience.
+		 */
+		@Override
+		public int compare(Customer arg0, Customer arg1) {
+			return 0;
+		}
+		
+	}
+	
+	/**
+	 * Recursive Selection Sort for an array
+	 * @param shelve - Array to be sorted
+	 */
+	public static Queue<Customer> selectionSort(Queue<Customer> line, Comparator<Customer> comp) {
+		Customer[] lineArr = new Customer[line.size()];
+		int idx = 0;
+		for(Customer cu: line) {
+			lineArr[idx] = cu;
+			idx++;
+		}
+		selHelper(lineArr, 0, comp);
+		Queue<Customer> newLine = new LinkedList<>();
+		for(idx = 0; idx < lineArr.length; idx++) {
+			newLine.add(lineArr[idx]);
+		}
+		return newLine;
+		
+	}
+	
+	private	static void	selHelper(Customer[] lineArr, int tailIndex, Comparator<Customer> comp) {
+		if(tailIndex >= lineArr.length) { return; }
+		int	minIndex = tailIndex;
+		for(int	i = tailIndex; i < lineArr.length; i++) {
+			if(comp.compare(lineArr[minIndex], lineArr[i]) > 0) {
+				minIndex = i;
+			}	
+		}
+		Customer temp = lineArr[minIndex];
+		lineArr[minIndex] = lineArr[tailIndex];
+		lineArr[tailIndex] = temp;
+		selHelper(lineArr, tailIndex+1, comp);
+	}
+
+	public static class Customer {
 		public int timeEntered;
 		public int bill;
-		public int timeToCompleted;
+		public int timeToComplete;
 		public int patience;
 		public String Name;
 
-		public Customer(String Name,int timeEntered, int bill, int timeToCompleted, int patience) {
+		public Customer(String Name,int timeEntered, int bill, int timeToComplete, int patience) {
 			this.timeEntered = timeEntered;
 			this.bill = bill;
-			this.timeToCompleted = timeToCompleted;
+			this.timeToComplete = timeToComplete;
 			this.patience = patience;
 			this.Name = Name;
 		}
@@ -176,12 +225,12 @@ public class JavaRestaurant {
 			this.bill = bill;
 		}
 
-		public int getTimeToCompleted() {
-			return timeToCompleted;
+		public int getTimeToComplete() {
+			return timeToComplete;
 		}
 
-		public void setTimeToCompleted(int timeToCompleted) {
-			this.timeToCompleted = timeToCompleted;
+		public void setTimeToCompleted(int timeToComplete) {
+			this.timeToComplete = timeToComplete;
 		}
 
 		public int getPatience() {
@@ -193,16 +242,9 @@ public class JavaRestaurant {
 		}
 
 		public String toString() {
-			return "("+Name + ", Patience: " + patience + " \nOrders Time: " + timeToCompleted+")";
+			return "("+Name + ", Patience: " + patience + " \nOrders Time: " + timeToComplete+")";
 		}
 
-		/**
-		 * Exercise 3
-		 * Implement the comparable so that we can sort the entering customers by Patience
-		 */
-		public int compareTo(Customer o) {
-			return 0; //Dummy return
-		}	
 	}
 	public static class CustomerBuilder{
 		private int timeEntered = 0;
